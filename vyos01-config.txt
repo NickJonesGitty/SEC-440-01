@@ -1,0 +1,65 @@
+set firewall name WAN_LOCAL rule 10 action 'accept'
+set firewall name WAN_LOCAL rule 10 description 'Allow HTTP'
+set firewall name WAN_LOCAL rule 10 destination port '80'
+set firewall name WAN_LOCAL rule 10 protocol 'tcp'
+set firewall name WAN_LOCAL rule 10 state new 'enable'
+set high-availability vrrp group langroup0 address 10.0.5.1/24
+set high-availability vrrp group langroup0 interface 'eth1'
+set high-availability vrrp group langroup0 priority '200'
+set high-availability vrrp group langroup0 vrid '10'
+set high-availability vrrp group wangroup7 address 10.0.17.107/24
+set high-availability vrrp group wangroup7 interface 'eth0'
+set high-availability vrrp group wangroup7 priority '200'
+set high-availability vrrp group wangroup7 vrid '157'
+set interfaces ethernet eth0 address '10.0.17.17/24'
+set interfaces ethernet eth0 description 'WAN Assignment'
+set interfaces ethernet eth0 hw-id '00:50:56:a1:f7:8c'
+set interfaces ethernet eth1 address '10.0.5.2/24'
+set interfaces ethernet eth1 description 'LAN Assignment'
+set interfaces ethernet eth1 hw-id '00:50:56:a1:09:1f'
+set interfaces loopback lo
+set nat destination rule 10 description 'PortForward->Web01'
+set nat destination rule 10 destination port '80'
+set nat destination rule 10 inbound-interface 'eth0'
+set nat destination rule 10 protocol 'tcp'
+set nat destination rule 10 translation address '10.0.5.100'
+set nat destination rule 20 description 'SSH POrt Forward'
+set nat destination rule 20 destination port '22'
+set nat destination rule 20 inbound-interface 'eth0'
+set nat destination rule 20 protocol 'tcp'
+set nat destination rule 20 translation address '10.0.5.100'
+set nat destination rule 20 translation port '22'
+set nat destination rule 30 description 'Web02 POrt Forward'
+set nat destination rule 30 destination port '80'
+set nat destination rule 30 inbound-interface 'eth0'
+set nat destination rule 30 protocol 'tcp'
+set nat destination rule 30 translation address '10.0.5.101'
+set nat destination rule 30 translation port '80'
+set nat source rule 22 description 'NAT LAN->WAN'
+set nat source rule 22 outbound-interface 'eth0'
+set nat source rule 22 source address '10.0.5.0/24'
+set nat source rule 22 translation address 'masquerade'
+set protocols static route 0.0.0.0/0 next-hop 10.0.17.2
+set service dns forwarding allow-from '10.0.5.0/24'
+set service dns forwarding listen-address '10.0.5.2'
+set service dns forwarding system
+set service ssh listen-address '0.0.0.0'
+set system config-management commit-revisions '100'
+set system conntrack modules ftp
+set system conntrack modules h323
+set system conntrack modules nfs
+set system conntrack modules pptp
+set system conntrack modules sip
+set system conntrack modules sqlnet
+set system conntrack modules tftp
+set system console device ttyS0 speed '115200'
+set system host-name 'vyos1-nicholas'
+set system login user vyos authentication encrypted-password '$6$YUTCBnIl7XuxPfv7$UQXsMiDLSJsDs9mPJ2PQ.9IjjMks5MrKu6IlQRJsS.VIvkYeQXFvupJVrZMTQFYjkbTkRshVAYECJS337kHAS/'
+set system login user vyos authentication plaintext-password ''
+set system name-server '10.0.17.2'
+set system name-server '10.0.5.2'
+set system ntp server time1.vyos.net
+set system ntp server time2.vyos.net
+set system ntp server time3.vyos.net
+set system syslog global facility all level 'info'
+set system syslog global facility protocols level 'debug'
